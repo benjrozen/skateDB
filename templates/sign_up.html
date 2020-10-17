@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'template.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+{% block title %}Sign up{% endblock %}
+
+{% block main %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Sign up</h1>
+      <hr>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+</head>
+<body>
+{% block content %}
+
+<table style="height: 200px;" width="200">
+    <tbody>
+        {% for x in result %}
+         <tr> {## Here ##}
+            <td style="width: 190px;"><a href="/get_asin/{{ x['asin'] }}" target=_blank><img class="prod_pic" src ="{{ ['product_image'] }}"></a></td>
+                <td><a href="/get_asin/{{ x['asin'] }}" target=_blank>{{ x['product_name'] }}</a><br></td>
+                <td><a href="/get_asin/{{ x['asin'] }}" target=_blank>{{ x['TLC'] }}</a><br></td>
+         </tr> {## And Here ##}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+</body>
+</html>

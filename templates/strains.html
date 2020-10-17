@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'template.html' %}
+
+
+<html lang="en" dir="ltr">
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='style.css') }}">
+</head>
+<body>
+{% block content %}
+<div id="main">
+    <h2 class="strains_header">Trending Strains</h2>
+    {{data}}
+    {% for strain in strains %}
+    <div class="card">
+        <div class="image_box">
+            <a href="{{ url_for( 'strain', id=strain.id ) }}">
+                <img class="prod_pic" src='/static/prod_pics/{{ strain.pic }}'>
+            </a>
+        </div>
+        <table class="product_card">
+            <tr>
+                <th>Strain Name</th>
+                <th>Strain Type</th>
+                <th>Lineage</th>
+                <th>Pic</th>
+            </tr>
+
+            <!-- here is a for-loop to give us all the data -->
+            <tr>
+                <td>{{ strain.strain_name }}</td>
+                <td>{{ strain.strain_type }}</td>
+                <td>{{ strain.lineage }}</td>
+                <td>{{ strain.pic }}</td>
+            </tr>
+        </table>
+    </div>
+    <p style="padding-bottom: 10px;"></p>
+    {% endfor %}
+    {% endblock %}
+</div>
+</body>
+</html>
+
+

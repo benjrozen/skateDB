@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% extends 'template.html' %}
+<html lang="en" dir="ltr">
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='style.css') }}">
+    <!-- Side nav stuff -->
+    <script>
+         /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+         function openNav() {
+         document.getElementById("mySidenav").style.width = "250px";
+         document.getElementById("main").style.marginLeft = "250px";
+         }
+
+         /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+         function closeNav() {
+         document.getElementById("mySidenav").style.width = "0";
+         document.getElementById("main").style.marginLeft = "0";
+         }
+
+
+    </script>
+
+    <!-- Side nav stuff -->
+
+    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <div class="topnav" id="myTopnav">
+        <a href="#home" class="active">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</head>
+<body>
+{{data}}
+<div class="header">
+    <!-- Use any element to open the sidenav -->
+    <span onclick="openNav()">
+         <img src="{{url_for('static', filename='leaf.png')}}" alt="Logo">
+         </span>
+    <a class="logo" href="#default">Welcome to Potlopedia</a>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <strong>
+            <nav>
+                <ul class="menu">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+
+                </ul>
+            </nav>
+        </strong>
+    </div>
+</div>
+</div>
+<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+<div id="main">
+
+</body>
+</div>
+</div>
+
+</html>
+>
