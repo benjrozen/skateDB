@@ -218,7 +218,6 @@ body {
   padding-bottom: 5px;
   margin-bottom:10px;
 }
-  border: 1px solid black;
 
 .strain_name_header {
     font-family: 'Aclonica', sans-serif;
@@ -229,14 +228,15 @@ body {
     top: 145px;
     border-bottom: 1px solid #000;
     display: unset;
-    }
+}
+
 
 .prod_page_card {
     margin-left: 600px;
     position: absolute;
     left: 500px;
     top: 395px;
-    }
+}
 
 .table_header {
     font-weight: bold;

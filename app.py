@@ -12,18 +12,6 @@ from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringFie
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
-
-SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://tunker95:sukablad@tunker95.mysql.pythonanywhere-services.com/tunker95$potloDB".format(
-    username="the username from the 'Databases' tab",
-    password="the password you set on the 'Databases' tab",
-    hostname="the database host address from the 'Databases' tab",
-    databasename="the database name you chose, probably yourusername$comments",
-)
-app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
 
 # Flask-WTF requires an enryption key - the string can be anything
 app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
@@ -31,19 +19,20 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
+
+
 # change to name of your database; add path if necessary
-# db_name = 'C:\DB\potlopedia.db'
+db_name = 'C:\DB\potlopedia.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # this variable, db, will be used for all SQLAlchemy commands
-# db = SQLAlchemy(app)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
+db = SQLAlchemy(app)
 
 # image upload folder and extensions
-UPLOAD_FOLDER = '/home/tunker95/Potlopedia/static/prod_pics/'
+UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -53,11 +42,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # identify all columns by name and data type
 class Strain(db.Model):
     __tablename__ = 'strains'
-    id = db.Column(db.Integer, primary_key=True)
-    strain_name = db.Column(db.VARCHAR(100))
-    strain_type = db.Column(db.VARCHAR(100))
-    lineage = db.Column(db.VARCHAR(100))
-    pic = db.Column(db.VARCHAR(100))
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    strain_name = db.Column(db.VARCHAR)
+    strain_type = db.Column(db.VARCHAR)
+    lineage = db.Column(db.VARCHAR)
+    pic = db.Column(db.VARCHAR)
 
     def __init__(self, strain_name, strain_type, lineage, pic):
         self.strain_name = strain_name
@@ -85,7 +74,7 @@ class DeleteForm(FlaskForm):
 
 @app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template('index.html') \
 
 @app.route("/boot")
 def boot():
@@ -214,5 +203,6 @@ def sign_up():
         return redirect(request.url)
 
     return render_template("sign_up.html")
+
 
 if __name__ == "__main__": app.run(debug=True)
