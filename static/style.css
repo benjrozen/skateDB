@@ -277,9 +277,6 @@ table, th, td {
 }
 
 
-
-
-
 /* Product image */
 .prod_pic {
     max-width: 100%;
@@ -299,15 +296,11 @@ table, th, td {
     padding-top: 10px;
 }
 
-    .image_box{
+.image_box{
         height: 100px;
         margin: 10%;
-    }
+}
 
-     .prod_page_image_box{
+.prod_page_image_box{
         height: 500px;
-    }
-
-
-
-
+}

@@ -11,6 +11,7 @@ from flask_wtf.file import FileField
 from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringField, IntegerField, FloatField
 from werkzeug.utils import secure_filename
 
+
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
@@ -31,16 +32,6 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-# change to name of your database; add path if necessary
-# db_name = 'C:\DB\potlopedia.db'
-
-# this variable, db, will be used for all SQLAlchemy commands
-# db = SQLAlchemy(app)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
 
 # image upload folder and extensions
 UPLOAD_FOLDER = '/home/tunker95/Potlopedia/static/prod_pics/'
@@ -59,11 +50,13 @@ class Strain(db.Model):
     lineage = db.Column(db.VARCHAR(100))
     pic = db.Column(db.VARCHAR(100))
 
+
     def __init__(self, strain_name, strain_type, lineage, pic):
         self.strain_name = strain_name
         self.strain_type = strain_type
         self.lineage = lineage
         self.pic = pic
+
 
 
 class AddRecord(FlaskForm):
@@ -83,6 +76,7 @@ class DeleteForm(FlaskForm):
     submit = SubmitField('Delete This Strain')
 
 
+
 @app.route("/")
 def home():
     return render_template('index.html')
@@ -90,7 +84,6 @@ def home():
 @app.route("/boot")
 def boot():
     return render_template('base.html')
-
 
 # add a new strain to the database
 @app.route('/add_strain', methods=['GET', 'POST'])
@@ -103,6 +96,8 @@ def add_record():
         pic = request.files['pic']
         pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
 
+
+
         # the data to be inserted into Strain model - the table, strains
         record = Strain(strain_name, strain_type, lineage, pic.filename)
         # Flask-SQLAlchemy magic adds record to database
@@ -111,7 +106,7 @@ def add_record():
         # create a message to send to the template
         message = f"The data for strain {strain_name} has been submitted."
 
-        return render_template('add_strain.html', message=message, )
+        return render_template('add_strain.html', message=message,)
     else:
         # show validaton errors
         # see https://pythonprogramming.net/flash-flask-tutorial/
@@ -129,7 +124,6 @@ def add_record():
 def select_record():
     strains = Strain.query.all()
     return render_template('select_strain.html', strains=strains)
-
 
 # edit or delete - come here from form in /select_record
 @app.route('/edit_or_delete', methods=['POST'])
@@ -198,16 +192,17 @@ def strains():
     return render_template('strains.html', strains=strains)
 
 
+
 @app.route("/strain/<id>")
 def strain(id):
     strains = Strain.query.filter_by(id=id).all()
     Strain.id == id
     return render_template('product_page.html', strains=strains)
 
-
 @app.route("/sign-up", methods=["GET", "POST"])
 def sign_up():
     if request.method == "POST":
+
         req = request.form
         print(req)
 
@@ -215,4 +210,4 @@ def sign_up():
 
     return render_template("sign_up.html")
 
-if __name__ == "__main__": app.run(debug=True)
+#if __name__ == "__main__": app.run(debug=True)
