@@ -20,22 +20,6 @@
                 <img class="prod_pic" src='/static/prod_pics/{{ strain.pic }}'>
             </a>
         </div>
-        <table class="product_card">
-            <tr>
-                <th>Strain Name</th>
-                <th>Strain Type</th>
-                <th>Lineage</th>
-                <th>Pic</th>
-            </tr>
-
-            <!-- here is a for-loop to give us all the data -->
-            <tr>
-                <td>{{ strain.strain_name }}</td>
-                <td>{{ strain.strain_type }}</td>
-                <td>{{ strain.lineage }}</td>
-                <td>{{ strain.pic }}</td>
-            </tr>
-        </table>
     </div>
     <p style="padding-bottom: 10px;"></p>
     {% endfor %}
@@ -43,5 +27,6 @@
 </div>
 </body>
 </html>
+
 
 
