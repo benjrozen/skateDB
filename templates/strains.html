@@ -1,32 +1,43 @@
 <!DOCTYPE html>
-{% extends 'template.html' %}
-
-
-<html lang="en" dir="ltr">
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static',    filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    {% extends 'template.html' %}
 </head>
 <body>
 {% block content %}
-<div id="main">
-    <h2 class="strains_header">Trending Strains</h2>
-    {{data}}
-    {% for strain in strains %}
-    <div class="card">
-        <div class="image_box">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="strains_header">Trending Strains</h1>
+        </div>
+        {{image_names}}
+        <hr>
+        {% for strain in strains %}
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
             <a href="{{ url_for( 'strain', id=strain.id ) }}">
-                <img class="prod_pic" src='/static/prod_pics/{{ strain.pic }}'>
+                <div class="card">
+                    <div class="image_box">
+                        <img class="gallery_pic" src='/static/prod_pics/{{ strain.pic }}'>
+                    </div>
+
+                    <div class="prod_title">
+                        <h3 class="prod_name">{{ strain.strain_name }}</h3>
+                    </div>
+                </div>
             </a>
         </div>
+        {% endfor %}
+        {% endblock %}
+
     </div>
-    <p style="padding-bottom: 10px;"></p>
-    {% endfor %}
-    {% endblock %}
 </div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>
-
-
-
