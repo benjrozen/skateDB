@@ -1,15 +1,14 @@
 import os
 from os import abort
-
 from flask import Flask, render_template, request, redirect, flash
-from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
+from flask_mysqldb import MySQL
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-
-from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringField, IntegerField, FloatField
-from werkzeug.utils import secure_filename
+from wtforms import SubmitField, HiddenField, StringField, SelectField
+import yaml
 
 app = Flask(__name__)
 
@@ -18,8 +17,6 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 
 # Flask-Bootstrap requires this line
 Bootstrap(app)
-
-
 
 # change to name of your database; add path if necessary
 db_name = 'C:\DB\potlopedia.db'
@@ -30,6 +27,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # this variable, db, will be used for all SQLAlchemy commands
 db = SQLAlchemy(app)
+
+
+dbcon = yaml.load(open('dbconf.yaml'))
+app.config['MYSQL_HOST'] = dbcon['mysql_host']
+app.config['MYSQL_USER'] = dbcon['mysql_user']
+app.config['MYSQL_PASSWORD'] = dbcon['mysql_password']
+app.config['MYSQL_DB'] = dbcon['mysql_db']
+app.config['MYSQL_CURSORCLASS'] = dbcon['mysql_cursor_class']
+mysql = MySQL(app)
+
 
 # image upload folder and extensions
 UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/'
@@ -74,7 +81,20 @@ class DeleteForm(FlaskForm):
 
 @app.route("/")
 def home():
-    return render_template('index.html') \
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM strains")
+    strains = cur.fetchall()
+    return render_template('index.html', strains=strains)
+
+
+@app.route("/result", methods=['POST'])
+def searchresult():
+    searchQuery = "%" + request.form.get("query") + "%"
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM strains WHERE strain_name LIKE %s OR strain_type LIKE %s OR lineage LIKE %s", (searchQuery, searchQuery, searchQuery))
+    strain = cur.fetchall()
+    return render_template('search_results.html', strain=strain)
+
 
 @app.route("/boot")
 def boot():
@@ -92,11 +112,13 @@ def add_record():
         pic = request.files['pic']
         pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
 
-        # the data to be inserted into Strain model - the table, strains
-        record = Strain(strain_name, strain_type, lineage, pic.filename)
-        # Flask-SQLAlchemy magic adds record to database
-        db.session.add(record)
-        db.session.commit()
+        cur = mysql.connection.cursor()
+        mySql_insert_query = """INSERT INTO strains (strain_name, strain_type, lineage, pic) 
+                                VALUES (%s, %s, %s, %s) """
+        recordTuple = (strain_name, strain_type, lineage, pic.filename)
+        cur.execute(mySql_insert_query, recordTuple)
+        mysql.connection.commit()
+
         # create a message to send to the template
         message = f"The data for strain {strain_name} has been submitted."
 
@@ -116,7 +138,9 @@ def add_record():
 # select a record to edit or delete
 @app.route('/select_record')
 def select_record():
-    strains = Strain.query.all()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM strains")
+    strains = cur.fetchall()
     return render_template('select_strain.html', strains=strains)
 
 
@@ -125,7 +149,9 @@ def select_record():
 def edit_or_delete():
     id = request.form['id']
     choice = request.form['choice']
-    strain = Strain.query.filter(Strain.id == id).first()
+    cur = mysql.connection.cursor()
+    cur.execute("""SELECT * FROM strains WHERE id = %s""", (id,))
+    strain = cur.fetchone()
     # two forms in this template
     form1 = AddRecord()
     form2 = DeleteForm()
@@ -136,11 +162,16 @@ def edit_or_delete():
 def delete_result():
     id = request.form['id_field']
     purpose = request.form['purpose']
-    strain = Strain.query.filter(Strain.id == id).first()
+
+    cur = mysql.connection.cursor()
+    deleteSQL = "DELETE FROM strains WHERE id=%s"
+    cur.execute("""SELECT * FROM strains WHERE id = %s""", (id,))
+    strain = cur.fetchone()
+
     if purpose == 'delete':
-        db.session.delete(strain)
-        db.session.commit()
-        message = f"The strain {strain.strain_name} has been deleted from the database."
+        cur.execute(deleteSQL, (id,))
+        mysql.connection.commit()
+        message = f"The strain {strain['strain_name']} has been deleted from the database."
         return render_template('result.html', message=message)
     else:
         # this calls an error handler
@@ -183,14 +214,17 @@ def edit_result():
 
 @app.route("/strains")
 def strains():
-    strains = Strain.query.all()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM strains")
+    strains = cur.fetchall()
     return render_template('strains.html', strains=strains)
 
 
 @app.route("/strain/<id>")
 def strain(id):
-    strains = Strain.query.filter_by(id=id).all()
-    Strain.id == id
+    cur = mysql.connection.cursor()
+    cur.execute("""SELECT * FROM strains WHERE id = %s""", (id,))
+    strains = cur.fetchall()
     return render_template('product_page.html', strains=strains)
 
 

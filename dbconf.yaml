@@ -1,0 +1,5 @@
+mysql_host: 'localhost'
+mysql_user: 'root'
+mysql_password: 'sukablad'
+mysql_db: 'potlodb'
+mysql_cursor_class: 'DictCursor'
