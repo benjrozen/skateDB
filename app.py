@@ -1,6 +1,6 @@
 import os
+
 os.environ["GIT_PYTHON_REFRESH"] = "quiet"
-import git
 from os import abort
 from flask import Flask, render_template, request, redirect, flash
 from flask_bootstrap import Bootstrap
@@ -9,7 +9,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField, HiddenField, StringField
 import yaml
-import subprocess
+import git
 
 app = Flask(__name__)
 
@@ -33,16 +33,17 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-# GitHub listner and deployer
-@app.route('/git_up', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('https://github.com/benjrozen/Potlopedia_flask')
+        repo = git.Repo('./Potlopedia_2.0')
         origin = repo.remotes.origin
+        repo.create_head('master',
+    origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
         origin.pull()
-        return 'Updated PythonAnywhere successfully', 200
+        return '', 200
     else:
-        return 'Wrong event type', 400
+        return '', 400
 
 
 class AddRecord(FlaskForm):
@@ -222,17 +223,5 @@ def sign_up():
 
     return render_template("sign_up.html")
 
-
-# def gitChecker():
-#     repo = git.Repo(search_parent_directories=True)
-#     sha = repo.head.object.hexsha
-#     return sha
-
-import subprocess
-
-@app.route("/gitcheck")
-def get_git_revision_hash():
-    repo = git.Repo(search_parent_directories=True)
-    sha = repo.head.object.hexsha
 
 if __name__ == "__main__": app.run(debug=True)
