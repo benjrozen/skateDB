@@ -1,13 +1,13 @@
 import os
+os.environ["GIT_PYTHON_REFRESH"] = "quiet"
+import git
 from os import abort
 from flask import Flask, render_template, request, redirect, flash
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import or_
 from flask_mysqldb import MySQL
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import SubmitField, HiddenField, StringField, SelectField
+from wtforms import SubmitField, HiddenField, StringField
 import yaml
 
 app = Flask(__name__)
@@ -18,17 +18,6 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-# change to name of your database; add path if necessary
-db_name = 'C:\DB\potlopedia.db'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-# this variable, db, will be used for all SQLAlchemy commands
-db = SQLAlchemy(app)
-
-
 dbcon = yaml.load(open('dbconf.yaml'))
 app.config['MYSQL_HOST'] = dbcon['mysql_host']
 app.config['MYSQL_USER'] = dbcon['mysql_user']
@@ -37,29 +26,22 @@ app.config['MYSQL_DB'] = dbcon['mysql_db']
 app.config['MYSQL_CURSORCLASS'] = dbcon['mysql_cursor_class']
 mysql = MySQL(app)
 
-
 # image upload folder and extensions
 UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-# each table in the database needs a class to be created for it
-# db.Model is required - don't change it
-# identify all columns by name and data type
-class Strain(db.Model):
-    __tablename__ = 'strains'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
-    strain_name = db.Column(db.VARCHAR)
-    strain_type = db.Column(db.VARCHAR)
-    lineage = db.Column(db.VARCHAR)
-    pic = db.Column(db.VARCHAR)
-
-    def __init__(self, strain_name, strain_type, lineage, pic):
-        self.strain_name = strain_name
-        self.strain_type = strain_type
-        self.lineage = lineage
-        self.pic = pic
+# GitHub listner and deployer
+@app.route('/git_up', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('https://github.com/benjrozen/Potlopedia_flask')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 
 class AddRecord(FlaskForm):
@@ -91,7 +73,8 @@ def home():
 def searchresult():
     searchQuery = "%" + request.form.get("query") + "%"
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM strains WHERE strain_name LIKE %s OR strain_type LIKE %s OR lineage LIKE %s", (searchQuery, searchQuery, searchQuery))
+    cur.execute("SELECT * FROM strains WHERE strain_name LIKE %s OR strain_type LIKE %s OR lineage LIKE %s",
+                (searchQuery, searchQuery, searchQuery))
     strain = cur.fetchall()
     return render_template('search_results.html', strain=strain)
 
