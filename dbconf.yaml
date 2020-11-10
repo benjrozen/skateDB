@@ -1,5 +1,0 @@
-mysql_host: 'localhost'
-mysql_user: '******'
-mysql_password: '******'
-mysql_db: '******'
-mysql_cursor_class: 'DictCursor'
