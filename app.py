@@ -9,6 +9,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField, HiddenField, StringField
 import yaml
+import subprocess
 
 app = Flask(__name__)
 
@@ -221,5 +222,17 @@ def sign_up():
 
     return render_template("sign_up.html")
 
+
+# def gitChecker():
+#     repo = git.Repo(search_parent_directories=True)
+#     sha = repo.head.object.hexsha
+#     return sha
+
+import subprocess
+
+@app.route("/gitcheck")
+def get_git_revision_hash():
+    repo = git.Repo(search_parent_directories=True)
+    sha = repo.head.object.hexsha
 
 if __name__ == "__main__": app.run(debug=True)
