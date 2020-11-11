@@ -32,7 +32,7 @@ UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-anni = 7
+anni = 789
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
