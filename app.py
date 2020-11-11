@@ -37,7 +37,7 @@ anni = 7
 @app.route('/webhook', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('tunker95.pythonanywhere.com/')
+        repo = git.Repo('/home/tunker95/Potlopedia/')
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
