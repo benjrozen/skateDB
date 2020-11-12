@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-dbcon = yaml.load(open('dbconf.yaml'))
+dbcon = yaml.load(open('dbconf.yaml'), Loader=yaml.FullLoader)
 app.config['MYSQL_HOST'] = dbcon['mysql_host']
 app.config['MYSQL_USER'] = dbcon['mysql_user']
 app.config['MYSQL_PASSWORD'] = dbcon['mysql_password']
