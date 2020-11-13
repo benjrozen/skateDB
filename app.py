@@ -32,12 +32,12 @@ UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-anni = 789
+anni = "maybe this will work this time"
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/git_up', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('/home/tunker95/Potlopedia/')
+        repo = git.Repo('/var/www/sites/mysite')
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
