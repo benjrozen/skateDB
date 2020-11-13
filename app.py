@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-dbcon = yaml.load(open('dbconf.yaml'))
+dbcon = yaml.load(open('dbconf.yaml'), Loader=yaml.FullLoader)
 app.config['MYSQL_HOST'] = dbcon['mysql_host']
 app.config['MYSQL_USER'] = dbcon['mysql_user']
 app.config['MYSQL_PASSWORD'] = dbcon['mysql_password']
@@ -32,12 +32,13 @@ UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 anni = "suka suka blad blad"
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/git_up', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('/home/tunker95/Potlopedia/')
+        repo = git.Repo('/var/www/sites/mysite')
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
