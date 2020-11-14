@@ -39,6 +39,10 @@ anni = "123456789"
 def webhook():
     if request.method == 'POST':
         repo = git.Repo('/home/tunker95/Potlopedia')
+@app.route('/git_up', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/var/www/sites/mysite')
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
