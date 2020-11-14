@@ -33,7 +33,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-anni = "something borrowed something blue"
+anni = "mega post-merge check"
 
 @app.route('/git_up', methods=['POST'])
 def webhook():
