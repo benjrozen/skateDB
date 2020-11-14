@@ -11,6 +11,9 @@ from wtforms import SubmitField, HiddenField, StringField
 import yaml
 import git
 
+
+anni = "suka suka blad blad"
+
 app = Flask(__name__)
 
 # Flask-WTF requires an enryption key - the string can be anything
@@ -32,8 +35,6 @@ UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-anni = "suka suka blad blad"
 
 @app.route('/git_up', methods=['POST'])
 def webhook():
