@@ -250,7 +250,6 @@ a {
 }
 
 #myCarousel {
-  background-color: #34d8502b;
   max-width: 35%;
 }
 
@@ -269,7 +268,27 @@ a {
   padding-top: 10px;
 }
 
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  height: 100px;
+  width: 100px;
+  outline: black;
+  background-size: 100%, 100%;
+  background-image: none;
+}
 
+.carousel-control-next-icon:after
+{
+  content: '>';
+  font-size: 55px;
+  color: #34d850;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 55px;
+  color: #34d850;
+}
 
 /* Strains page */
 .strains_header {
