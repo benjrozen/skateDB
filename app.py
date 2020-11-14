@@ -32,7 +32,8 @@ UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-anni = "suka suka blad blad"
+
+anni = "123456789"
 
 @app.route('/git_up', methods=['POST'])
 def webhook():
