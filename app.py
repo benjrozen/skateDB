@@ -19,18 +19,17 @@ app.config['SECRET_KEY'] = 'MLXH243GssUWwKdTWS7FDhdwYF56wPj8'
 # Flask-Bootstrap requires this line
 Bootstrap(app)
 
-dbcon = yaml.load(open('dbconf.yaml'), Loader=yaml.FullLoader)
-app.config['MYSQL_HOST'] = dbcon['mysql_host']
-app.config['MYSQL_USER'] = dbcon['mysql_user']
-app.config['MYSQL_PASSWORD'] = dbcon['mysql_password']
-app.config['MYSQL_DB'] = dbcon['mysql_db']
-app.config['MYSQL_CURSORCLASS'] = dbcon['mysql_cursor_class']
+conf = yaml.load(open('dbconf.yaml'), Loader=yaml.FullLoader)
+app.config['MYSQL_HOST'] = conf['mysql_host']
+app.config['MYSQL_USER'] = conf['mysql_user']
+app.config['MYSQL_PASSWORD'] = conf['mysql_password']
+app.config['MYSQL_DB'] = conf['mysql_db']
+app.config['MYSQL_CURSORCLASS'] = conf['mysql_cursor_class']
 mysql = MySQL(app)
 
 # image upload folder and extensions
-UPLOAD_FOLDER = 'C:/Users/tunke/PycharmProjects/Potlopedia_2.0/static/prod_pics/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = conf['upload_folder']
 
 
 anni = "all for free"
@@ -38,7 +37,7 @@ anni = "all for free"
 @app.route('/git_up', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('/home/tunker95/Potlopedia')
+        repo = git.Repo(conf['remote_repo'])
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
