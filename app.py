@@ -38,7 +38,7 @@ anni = "suka suka blad blad"
 @app.route('/git_up', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('/var/www/sites/mysite')
+        repo = git.Repo('/home/tunker95/Potlopedia')
         origin = repo.remotes.origin
         origin.pull()
         return 'Deploy Success', 200
