@@ -11,6 +11,7 @@
 <body>
 {% block content %}
     {% for strain in strains %}
+
 <div>
 <h2 class="strain_name_header">{{ strain.strain_name }}</h2>
 </div>
@@ -22,8 +23,10 @@
 </div>
 
 {{data}}
+
 <div class="prod_page_card">
         <table class="product_card_prod_page">
+
              <tr>
             <td class="table_header">Strain Type</td><td>{{ strain.strain_type }}</td>
          </tr>
@@ -33,12 +36,24 @@
              <tr>
             <td class="table_header">Pic</td><td>{{ strain.pic }}</td>
          </tr>
+      <tr>
+            <td class="table_header">THC</td><td>{{ strain.THC}}</td>
+         </tr>
+      <tr>
+            <td class="table_header">THC</td><td>{{ strain.THC}}</td>
+         </tr>
         </table>
+
 </div>
     <p style="padding-bottom: 10px;"></p>
+
     {% endfor %}
     {% endblock %}
+
+
 </div>
 
 </body>
 </html>
+
+
