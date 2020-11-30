@@ -13,27 +13,27 @@
 <div id="main">
     <h2 class="strains_header">Search Results</h2>
     {{data}}
-    {% for strain in strain %}
+    {% for brand in brands %}
     <div class="card">
         <div class="image_box">
-            <a href="{{ url_for( 'strain', id=strain.id ) }}">
-                <img class="prod_pic" src='/static/prod_pics/{{ strain.pic }}'>
+            <a href="{{ url_for( 'brand', id=brand.id ) }}">
+                <img class="prod_pic" src='/static/prod_pics/{{ brand.pic }}'>
             </a>
         </div>
         <table class="product_card">
             <tr>
-                <th>Strain Name</th>
-                <th>Strain Type</th>
-                <th>Lineage</th>
-                <th>Pic</th>
+                <th>Brand Name</th>
+                <th>Founded</th>
+                <th>Headquaters</th>
+                <th>Products</th>
             </tr>
 
             <!-- here is a for-loop to give us all the data -->
             <tr>
-                <td>{{ strain.strain_name }}</td>
-                <td>{{ strain.strain_type }}</td>
-                <td>{{ strain.lineage }}</td>
-                <td>{{ strain.pic }}</td>
+                <td>{{ brand.brand_name }}</td>
+                <td>{{ brand.founded }}</td>
+                <td>{{ brand.headquaters }}</td>
+                <td>{{ brand.products }}</td>
             </tr>
 
         </table>

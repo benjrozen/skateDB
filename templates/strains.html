@@ -16,16 +16,16 @@
         </div>
         {{image_names}}
         <hr>
-        {% for strain in strains %}
+        {% for brand in brands %}
         <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-            <a href="{{ url_for( 'strain', id=strain.id ) }}">
+            <a href="{{ url_for( 'brand', id=brand.id ) }}">
                 <div class="card">
                     <div class="image_box">
-                        <img class="gallery_pic" src='/static/prod_pics/{{ strain.pic }}'>
+                        <img class="gallery_pic" src='/static/prod_pics/{{ brand.pic }}'>
                     </div>
 
                     <div class="prod_title">
-                        <h3 class="prod_name">{{ strain.strain_name }}</h3>
+                        <h3 class="prod_name">{{ brand.brand_name }}</h3>
                     </div>
                 </div>
             </a>
