@@ -31,7 +31,7 @@ mysql = MySQL(app)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = conf['upload_folder']
 
-#################################GOGOGSAGE
+#################################THIS WILL WORK
 
 @app.route('/git_up', methods=['POST'])
 def webhook():
