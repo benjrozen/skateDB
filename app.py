@@ -157,7 +157,7 @@ def delete_result():
 
     cur = mysql.connection.cursor()
     deleteSQL = "DELETE FROM brands WHERE id=%s"
-    cur.execute("""SELECT * FROM strains WHERE id = %s""", (id,))
+    cur.execute("""SELECT * FROM brands WHERE id = %s""", (id,))
     brand = cur.fetchone()
 
     if purpose == 'delete':
