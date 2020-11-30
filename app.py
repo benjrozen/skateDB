@@ -156,14 +156,14 @@ def delete_result():
     purpose = request.form['purpose']
 
     cur = mysql.connection.cursor()
-    deleteSQL = "DELETE FROM strains WHERE id=%s"
+    deleteSQL = "DELETE FROM brands WHERE id=%s"
     cur.execute("""SELECT * FROM strains WHERE id = %s""", (id,))
-    strain = cur.fetchone()
+    brand = cur.fetchone()
 
     if purpose == 'delete':
         cur.execute(deleteSQL, (id,))
         mysql.connection.commit()
-        message = f"The strain {strain['strain_name']} has been deleted from the database."
+        message = f"The strain {brand['brand_name']} has been deleted from the database."
         return render_template('result.html', message=message)
     else:
         # this calls an error handler
