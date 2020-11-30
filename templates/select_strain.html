@@ -16,7 +16,7 @@
 
 
 {% block title %}
-Select a Strain
+Select a Brand
 {% endblock %}
 </head>
 <body>
@@ -27,9 +27,9 @@ Select a Strain
   <div class="row pb-5">
     <div class="col-lg-10 mx-lg-auto">
 
-      <h1 class="pt-5 pb-2">Select a Strain</h1>
+      <h1 class="pt-5 pb-2">Select a Brand</h1>
 
-      <p class="lead alert alert-success">Select one strain to edit or delete.</p>
+      <p class="lead alert alert-success">Select one brand to edit or delete.</p>
 
 
 
@@ -40,26 +40,27 @@ Select a Strain
 		<table class="table">
 			<tr>
 				<th></th>
-				<th>Strain Name</th>
-				<th>Strain Type</th>
-				<th>Lineage</th>
-				<th>Pic</th>
+				<th>Brand Name</th>
+				<th>Founded</th>
+				<th>Headquarters</th>
+				<th>Products</th>
 			</tr>
 
 			<!-- here is a for-loop to give us all the strains -->
-			{%  for strain in strains %}
+			{%  for brand in brands %}
 			<tr>
-				<td style="vertical-align: middle" class="center-align"><input type="radio" name="id" value="{{ strain.id }}" required></td>
-                <td style="vertical-align: middle">{{ strain.strain_name }}</td>
-                <td style="vertical-align: middle">{{ strain.strain_type }}</td>
-                <td style="vertical-align: middle">{{ strain.lineage }}</td>
-				<td><div class="image_box"><img class="prod_pic" src='/static/prod_pics/{{ strain.pic }}'></td></div>
+				<td style="vertical-align: middle" class="center-align"><input type="radio" name="id" value="{{ brand.id }}" required></td>
+                <td style="vertical-align: middle">{{ brand.brand_name }}</td>
+                <td style="vertical-align: middle">{{ brand.founded }}</td>
+                <td style="vertical-align: middle">{{ brand.headquarters }}</td>
+                <td style="vertical-align: middle">{{ brand.products }}</td>
+				<td><div class="image_box"><img class="prod_pic" src='/static/prod_pics/{{ brand.pic }}'></td></div>
 			</tr>
 			{% endfor %}
 		</table>
 
 		<div class="form-group lead alert alert-success pb-4">
-          <p>What do you want to do with the selected record?</p>
+          <p>What do you want to do with the selected brand?</p>
 
           <div class="form-check form-check-inline">
           <label class="form-check-label"><input class="form-check-input" type="radio" name="choice" value="delete" required> Delete it</label>
