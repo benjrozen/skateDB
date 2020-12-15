@@ -1,7 +1,7 @@
 import os
 import re
 
-from app import app, mysql
+from deapp import app, mysql
 
 os.environ["GIT_PYTHON_REFRESH"] = "quiet"
 from os import abort
