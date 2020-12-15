@@ -1,18 +1,12 @@
 import os
-import re
-
 from deapp import app, mysql
-
 os.environ["GIT_PYTHON_REFRESH"] = "quiet"
 from os import abort
 from flask import Flask, render_template, request, redirect, flash
-from flask_bootstrap import Bootstrap
-from flask_mysqldb import MySQL
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField, HiddenField, StringField
 import yaml
-import git
 
 
 conf = yaml.load(open('dbconf.yaml'), Loader=yaml.FullLoader)
