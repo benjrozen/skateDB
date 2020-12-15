@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static',    filename='style.css') }}">
     <!-- Side nav stuff -->
@@ -18,6 +19,11 @@
          document.getElementById("mySidenav").style.width = "0";
          document.getElementById("main").style.marginLeft = "0";
          }
+
+
+
+
+
 
     </script>
 
@@ -61,14 +67,26 @@
         <div class="search-bar">
             <table class="search-table">
                 <tr>
-                    <td class="table_h"><input class="search-input" name="query" id="query" type="text" style="display:inline;" placeholder="Search"></td>
+                    <td class="table_h"><input class="search-input" name="query" id="query" type="text"
+                                               style="display:inline;" placeholder="Search"></td>
                     <td>
-                        <input src="{{url_for('static', filename='5.jpg')}}" alt="Mag" class="magnifier" type="image" style="display:inline;">
+                        <input src="{{url_for('static', filename='5.jpg')}}" alt="Mag" class="magnifier" type="image"
+                               style="display:inline;">
                     </td>
                 </tr>
             </table>
         </div>
     </form>
+
+    <div class="user_menu">
+        {% if session.logged_in %}
+        <h3 class="welcome_note">Greetings {{session.username}}</h3>
+        <a class="logout_note" href="{{ url_for('logout') }}">Logout</a>
+        {%else%}
+        <a class="login_note" href="{{ url_for('login') }}">login</a>
+        {% endif %}
+    </div>
+
 </div>
 </div>
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->

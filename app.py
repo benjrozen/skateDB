@@ -1,14 +1,17 @@
+import hashlib
 import os
 import re
 
+from flask_login import login_required, LoginManager, UserMixin, login_user, logout_user
+
 os.environ["GIT_PYTHON_REFRESH"] = "quiet"
 from os import abort
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, url_for, session, Response
 from flask_bootstrap import Bootstrap
 from flask_mysqldb import MySQL
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import SubmitField, HiddenField, StringField
+from wtforms import SubmitField, HiddenField, StringField, PasswordField
 import yaml
 import git
 import pypim
@@ -46,6 +49,111 @@ class AddField(FlaskForm):
     id_field = HiddenField()
     field_name = StringField('Field Name')
     submit = SubmitField('Add/Update Record')
+
+
+# flask-login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+# silly user model
+class User(UserMixin):
+
+    def __init__(self, id):
+        self.id = id
+        self.name = "user" + str(id)
+        self.password = self.name + "_secret"
+
+    def __repr__(self):
+        return "%d/%s/%s" % (self.id, self.name, self.password)
+
+
+class AddUser(FlaskForm):
+    # id used only by update/edit
+    id_field = HiddenField()
+    username = StringField('Username')
+    password = PasswordField('Password')
+    submit = SubmitField('Register')
+
+
+class uLogin(FlaskForm):
+    username = StringField('Username')
+    password = PasswordField('Password')
+    submit = SubmitField('Login')
+
+
+
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    session['logged_in'] = False
+    return redirect(url_for('login'))
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form3 = uLogin()
+    if form3.validate_on_submit():
+        username = request.form.get('username')
+        password = request.form.get('password')
+        cur = mysql.connection.cursor()
+        user = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        user = cur.fetchone()
+        password = hashlib.md5(password.encode())
+        enpass = password.hexdigest()
+
+        if (enpass == user['password']):
+            message = f"{username} has successfully logged in!."
+            id = user['id']
+            user = User(id)
+            login_user(User(id))
+            session['logged_in'] = True
+            session['username'] = username
+            return redirect(url_for('brands', message=message))
+        else:
+            return redirect(url_for('login'))
+    else:
+        # show validaton errors
+        # see https://pythonprogramming.net/flash-flask-tutorial/
+        for field, errors in form3.errors.items():
+            for error in errors:
+                flash("Error in {}: {}".format(
+                    getattr(form3, field).label.text,
+                    error
+                ), 'error')
+        return render_template('login.html', form3=form3)
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form2 = AddUser()
+    if form2.validate_on_submit():
+        username = request.form.get('username')
+        password = request.form.get('password')
+        cur = mysql.connection.cursor()
+        mySql_insert_query = ("INSERT INTO users (username, password)"
+                              "VALUES (%s, MD5(%s))")
+        recordTuple = (username, password)
+        cur.execute(mySql_insert_query, recordTuple)
+        mysql.connection.commit()
+        # create a message to send to the template
+        message = f"The user {username} has been added."
+        return render_template('login.html', message=message, )
+    else:
+        # show validaton errors
+        # see https://pythonprogramming.net/flash-flask-tutorial/
+        for field, errors in form2.errors.items():
+            for error in errors:
+                flash("Error in {}: {}".format(
+                    getattr(form2, field).label.text,
+                    error
+                ), 'error')
+        return render_template('signup.html', form2=form2)
 
 
 @app.route("/")
@@ -88,6 +196,7 @@ def edit_result():
 
 
 @app.route("/brands")
+@login_required
 def brands():
     return pypim.brands()
 
@@ -97,15 +206,7 @@ def brand(id):
     return pypim.brand(id)
 
 
-@app.route("/sign-up", methods=["GET", "POST"])
-def sign_up():
-    if request.method == "POST":
-        req = request.form
-        print(req)
 
-        return redirect(request.url)
-
-    return render_template("sign_up.html")
 
 
 # Add a new field to product page
@@ -176,6 +277,13 @@ def field_manager():
                     error
                 ), 'error')
         return render_template('fields_manager.html', formField=formField)
+
+
+
+# callback to reload the user object
+@login_manager.user_loader
+def load_user(userid):
+    return User(userid)
 
 
 if __name__ == "__main__": app.run(debug=True)
